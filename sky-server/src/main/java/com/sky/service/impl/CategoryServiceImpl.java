@@ -18,6 +18,7 @@ import com.sky.service.CategoryService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -36,6 +37,7 @@ public class CategoryServiceImpl implements CategoryService {
 
     /**
      * 新增分类
+     *
      * @param categoryDTO
      * @return
      */
@@ -59,12 +61,13 @@ public class CategoryServiceImpl implements CategoryService {
 
     /**
      * 分类分页查询
+     *
      * @param categoryPageQueryDTO
      * @return
      */
     @Override
     public PageResult pageQuery(CategoryPageQueryDTO categoryPageQueryDTO) {
-        PageHelper.startPage(categoryPageQueryDTO.getPage(),categoryPageQueryDTO.getPageSize());
+        PageHelper.startPage(categoryPageQueryDTO.getPage(), categoryPageQueryDTO.getPageSize());
         //下一条sql进行分页，自动加入limit关键字分页
         Page<Category> page = categoryMapper.pageQuery(categoryPageQueryDTO);
         return new PageResult(page.getTotal(), page.getResult());
@@ -72,6 +75,7 @@ public class CategoryServiceImpl implements CategoryService {
 
     /**
      * 启用禁用分类
+     *
      * @param status
      * @param id
      */
@@ -88,6 +92,7 @@ public class CategoryServiceImpl implements CategoryService {
 
     /**
      * 修改分类
+     *
      * @param categoryDTO
      */
     @Override
@@ -104,20 +109,21 @@ public class CategoryServiceImpl implements CategoryService {
 
     /**
      * 删除分类
+     *
      * @param id
      */
     @Override
     public void delete(Long id) {
         //查询当前分类是否关联了菜品，如果关联了就抛出业务异常
         Integer count = dishMapper.countByCategoryId(id);
-        if(count > 0){
+        if (count > 0) {
             //当前分类下有菜品，不能删除
             throw new DeletionNotAllowedException(MessageConstant.CATEGORY_BE_RELATED_BY_DISH);
         }
 
         //查询当前分类是否关联了套餐，如果关联了就抛出业务异常
         count = setmealMapper.countByCategoryId(id);
-        if(count > 0){
+        if (count > 0) {
             //当前分类下有套餐，不能删除
             throw new DeletionNotAllowedException(MessageConstant.CATEGORY_BE_RELATED_BY_SETMEAL);
         }
@@ -128,6 +134,7 @@ public class CategoryServiceImpl implements CategoryService {
 
     /**
      * 根据类型查询分类
+     *
      * @param type
      * @return
      */

@@ -70,7 +70,17 @@ public class DishServiceImpl implements DishService {
         return new PageResult(page.getTotal(), page.getResult());
     }
 
+    /**
+     * 菜品批量删除
+     * @param ids
+     */
+    /*
+    @Transactional 是用于管理事务的核心注解，它可以确保被标注的方法或类在事务环境中执行，
+    保证数据操作的原子性、一致性、隔离性和持久性（ACID 特性）
+    操作多个数据表要用
+     */
     @Override
+    @Transactional
     public void delete(List<Long> ids) {
         //判断当前菜品是否能够删除---是否起售中的菜品
         for (long id : ids) {
@@ -87,13 +97,20 @@ public class DishServiceImpl implements DishService {
             throw new DeletionNotAllowedException(MessageConstant.DISH_BE_RELATED_BY_SETMEAL);
         }
 
+//        for (long id : ids) {
+//            //删除菜品表中的菜品数据
+//            dishMapper.delete(id);
+//            //删除菜品关联的口味数据
+//            dishFlavorMapper.delete(id);
+//        }
 
-        for(long id : ids){
-            //删除菜品表中的菜品数据
-            dishMapper.delete(id);
-            //删除菜品关联的口味数据
-            dishFlavorMapper.delete(id);
-        }
+        //根据菜品id集合批量删除菜品数据
+        //sql:delete from dish where id in (?,?,?)
+        dishMapper.deleteByIds(ids);
+        //根据菜品id集合批量删除菜品关联的口味数据
+        //sql:delete from dish_flavor where dish_id in (?,?,?)
+        dishFlavorMapper.deleteByDishIds(ids);
+
 
     }
 
