@@ -72,6 +72,7 @@ public class DishServiceImpl implements DishService {
 
     /**
      * 菜品批量删除
+     *
      * @param ids
      */
     /*
@@ -110,6 +111,39 @@ public class DishServiceImpl implements DishService {
         //根据菜品id集合批量删除菜品关联的口味数据
         //sql:delete from dish_flavor where dish_id in (?,?,?)
         dishFlavorMapper.deleteByDishIds(ids);
+    }
+
+    @Override
+    public DishVO getDishAndFlavor(Long id) {
+        //菜品数据
+        Dish dish = dishMapper.query(id);
+        //口味数据
+        List<DishFlavor> flavors = dishFlavorMapper.getByDishId(id);
+        //查询到的封装到VO
+        DishVO dishVO = new DishVO();
+        BeanUtils.copyProperties(dish, dishVO);
+        dishVO.setFlavors(flavors);
+        return dishVO;
+
+
+    }
+
+    @Override
+    public void updateDishWithFlavor(DishDTO dishDTO) {
+        //菜品数据
+        Dish dish = new Dish();
+        BeanUtils.copyProperties(dishDTO, dish);
+        dishMapper.update(dish);
+        //删除原来的口味数据
+        dishFlavorMapper.deleteByDishId(dishDTO.getId());
+        //重新插入新的口味数据
+        List<DishFlavor> flavors = dishDTO.getFlavors();
+        if (flavors != null && flavors.size() > 0) {
+            flavors.forEach(dishFlavor -> {
+                dishFlavor.setDishId(dishDTO.getId());
+            });
+            dishFlavorMapper.insertBatch(flavors);
+        }
 
 
     }

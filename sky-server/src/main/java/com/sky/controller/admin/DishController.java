@@ -3,9 +3,11 @@ package com.sky.controller.admin;
 import com.sky.dto.DishDTO;
 import com.sky.dto.DishPageQueryDTO;
 import com.sky.dto.EmployeeDTO;
+import com.sky.entity.Dish;
 import com.sky.result.PageResult;
 import com.sky.result.Result;
 import com.sky.service.DishService;
+import com.sky.vo.DishVO;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,16 +27,16 @@ public class DishController {
 
     @PostMapping
     @ApiOperation("新增菜品")
-    public Result save(@RequestBody DishDTO dishDTO){
-        log.info("新增菜品：{}",dishDTO);
+    public Result save(@RequestBody DishDTO dishDTO) {
+        log.info("新增菜品：{}", dishDTO);
         dishService.saveWithFlavor(dishDTO);
         return Result.success();
     }
 
     @GetMapping("/page")
     @ApiOperation("菜品分页")
-    public Result<PageResult> page(DishPageQueryDTO dishPageQueryDTO){
-        log.info("菜品分页：{}",dishPageQueryDTO);
+    public Result<PageResult> page(DishPageQueryDTO dishPageQueryDTO) {
+        log.info("菜品分页：{}", dishPageQueryDTO);
         PageResult pageResult = dishService.pageQuery(dishPageQueryDTO);
         return Result.success(pageResult);
     }
@@ -45,9 +47,30 @@ public class DishController {
     @RequestParam 注解用于将请求中的参数（如 URL 中的?name=xxx&age=xxx或表单提交的键值对）绑定到控制器方法的参数上。
     适用于 GET 请求（主要通过 URL 参数传递），也可用于 POST 请求（表单提交时）。
      */
-    public Result delete(@RequestParam List<Long> ids){
-        log.info("菜品批量删除：{}",ids);
+    public Result delete(@RequestParam List<Long> ids) {
+        log.info("菜品批量删除：{}", ids);
         dishService.delete(ids);
+        return Result.success();
+    }
+
+    @GetMapping("/{id}")
+    @ApiOperation("根据id查询菜品")
+    /*
+    @PathVariable 用于将 URL 中的占位符参数（如 {id}）绑定到控制器方法的参数上。例如：
+     URL 路径：/api/users/{id}
+       占位符：{id}
+       提取后的值：通过 @PathVariable 映射到方法参数 id
+     */
+    public Result<DishVO> getById(@PathVariable Long id) {
+        log.info("根据id删除菜品：{}", id);
+        DishVO dishVO = dishService.getDishAndFlavor(id);
+        return Result.success(dishVO);
+    }
+
+    @PutMapping
+    @ApiOperation("修改菜品")
+    public Result update(@RequestBody DishDTO dishDTO){
+        dishService.updateDishWithFlavor(dishDTO);
         return Result.success();
     }
 
