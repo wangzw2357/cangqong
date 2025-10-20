@@ -8,7 +8,13 @@ sky:
     password: 1234
 
   alioss:
-    endpoint:
-    access-key-id:
-    access-key-secret:
-    bucket-name:
+    endpoint: oss-cn-hangzhou.aliyuncs.com
+    access-key-id: LTAI5tMvsEiCtAmexxJRa2N8
+    access-key-secret: zo9Uhcfm0N5OwDCcHVRTAZjsNXvd3g
+    bucket-name: web-wangzw
+
+  redis:
+    host: localhost
+    port: 6379
+    password: 123456
+    database: 0
