@@ -6,7 +6,11 @@ import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController("adminShopController")
 @RequestMapping("/admin/shop")
@@ -20,23 +24,30 @@ public class ShopController {
     private RedisTemplate redisTemplate;
 
     /**
-     * 设置店铺的营业状态
+     * 设置店铺营业状态
+     *
      * @param status
      * @return
      */
     @PutMapping("/{status}")
-    @ApiOperation("设置店铺的营业状态")
-    public Result setStatus(@PathVariable Integer status){
-        log.info("设置店铺的营业状态为：{}",status==1? "营业中":"打样中");
-        redisTemplate.opsForValue().set(KEY,status);
+    @ApiOperation("设置店铺营业状态")
+    public Result setStatus(@PathVariable Integer status) {
+        log.info("设置店铺状态为：{}", status == 1 ? "营业中" : "打样中");
+        redisTemplate.opsForValue().set(KEY, status);
         return Result.success();
     }
 
+    /**
+     * 获取店铺营业状态
+     *
+     * @return
+     */
     @GetMapping("/status")
-    @ApiOperation("查询店铺的营业状态")
-    public Result<Integer> getStatus(){
+    @ApiOperation("获取店铺营业状态")
+    public Result<Integer> getstus() {
         Integer shopStatus = (Integer) redisTemplate.opsForValue().get(KEY);
-        log.info("设置店铺的营业状态为：{}",shopStatus==1? "营业中":"打样中");
+        log.info("获取店铺营业状态为：{}", shopStatus == 1 ? "营业中" : "打样中");
         return Result.success(shopStatus);
     }
+
 }
