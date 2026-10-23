@@ -4,9 +4,10 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @Data
 @Builder
@@ -14,8 +15,12 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class DataOverViewQueryDTO implements Serializable {
 
-    private LocalDateTime begin;
+    //开始时间
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private LocalDate begin;
 
-    private LocalDateTime end;
+    //结束时间
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private LocalDate end;
 
 }
