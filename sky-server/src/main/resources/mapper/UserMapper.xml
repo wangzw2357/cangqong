@@ -10,4 +10,9 @@
             <if test="end != null">and create_time &lt;= #{end}</if>
         </where>
     </select>
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        insert into user (openid, name, phone, sex, id_number, avatar, create_time)
+        values (#{openid}, #{name}, #{phone}, #{sex}, #{idNumber}, #{avatar}, #{createTime})
+    </insert>
 </mapper>
