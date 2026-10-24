@@ -160,4 +160,15 @@ public class SetmealServiceImpl implements SetmealService {
                 .build();
         setmealMapper.update(setmeal);
     }
+
+    /**
+     * 条件查询套餐
+     *
+     * @param setmeal
+     * @return
+     */
+    @Override
+    public List<Setmeal> list(Setmeal setmeal) {
+        return setmealMapper.list(setmeal);
+    }
 }
